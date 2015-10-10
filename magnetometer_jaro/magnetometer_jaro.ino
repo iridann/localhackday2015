@@ -8,13 +8,13 @@ extern "C" {
 #include <EngduinoIR.h>
 //end jaro
 
-//janos
+//janos and fraser
 #include <EngduinoAccelerometer.h>
 #include <Wire.h>
 //
 
-//fraser
-#include <EngduinoMagnetometer.h>
+
+
 
 // Janos' methods
 void shaking() {
@@ -51,7 +51,7 @@ void shaking() {
 // Fraser - Reads the XYZ values and prints them through serial.
 int getXYZ() {
   float field[3];
-  EngduinoMagnetometer.xyz(field);
+  EngduinoAccelerometer.xyz(field);
 
   float x = field[0];
   float y = field[1];
@@ -70,9 +70,9 @@ int getXYZ() {
 // Fraser - Determines if paper (0), scissors(1) or rock(2)
 int getChoice(float z) {
   int value = int(z);
-  if (value < 3250) {
+  if (value < -0.50) {
     return 0;
-  } else if ((value > 3250.0) && (value < 3750.0)) {
+  } else if ((value > 0.50) && (value < -0.50)) {
     return 1;
   } else {
     return 2;

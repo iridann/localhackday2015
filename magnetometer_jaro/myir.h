@@ -91,20 +91,20 @@ void score_recv(int choice) {
     len = EngduinoIR.recv(buf);
     
     if (len > 0) {
-
-      // buf[0] is the result of the enemy
-      // choice is my result
-      //if(buf[0] == choice){
-        //EngduinoLEDs.setAll(YELLOW);
-        //return;
-      //}
-
       Serial.print("enemy: ");
       Serial.print(buf[0]);
       Serial.println();
       Serial.print("me: ");
       Serial.print(choice);
       Serial.println();
+      // buf[0] is the result of the enemy
+      // choice is my result
+      if(buf[0] == choice){
+        EngduinoLEDs.setAll(YELLOW);
+        return;
+      }
+
+      
 
       switch(buf[0]){
         case 0: 
@@ -162,3 +162,4 @@ int select_score_recv() {
 }
 
 #endif
+

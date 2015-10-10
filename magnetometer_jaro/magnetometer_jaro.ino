@@ -50,6 +50,7 @@ void shaking() {
 
 // Fraser - Reads the XYZ values and prints them through serial.
 int getXYZ() {
+  delay(800);
   float field[3];
   EngduinoAccelerometer.xyz(field);
 
@@ -70,9 +71,9 @@ int getXYZ() {
 // Fraser - Determines if paper (0), scissors(1) or rock(2)
 int getChoice(float z) {
   int value = int(z);
-  if (value < -0.50) {
+  if (value < -0.75) {
     return 0;
-  } else if ((value < 0.50) && (value > -0.50)) {
+  } else if ((value <= 0.75) && (value > -0.75)) {
     return 1;
   } else {
     return 2;
@@ -117,4 +118,5 @@ void loop() {
   }
   delay(500);
 }
+
 

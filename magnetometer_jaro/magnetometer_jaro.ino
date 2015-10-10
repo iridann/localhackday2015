@@ -23,6 +23,8 @@ void shaking() {
 
   while (true) {
     while (counter < 3) {
+            delay(100);
+
       EngduinoLEDs.setAll(YELLOW, 1);
       EngduinoAccelerometer.xyz(acc);
       Serial.print(" x: ");
@@ -39,7 +41,6 @@ void shaking() {
         counter++;
         EngduinoLEDs.setAll(RED, 1);
       }
-      delay(100);
     }
     EngduinoLEDs.setAll(BLUE, 1);
     break;
@@ -50,7 +51,7 @@ void shaking() {
 
 // Fraser - Reads the XYZ values and prints them through serial.
 int getXYZ() {
-  delay(800);
+  delay(1000);
   float field[3];
   EngduinoAccelerometer.xyz(field);
 
@@ -71,9 +72,9 @@ int getXYZ() {
 // Fraser - Determines if paper (0), scissors(1) or rock(2)
 int getChoice(float z) {
   int value = int(z);
-  if (value < -0.75) {
+  if (value < -0.60) {
     return 0;
-  } else if ((value <= 0.75) && (value > -0.75)) {
+  } else if ((value <= 0.60) && (value > -0.60)) {
     return 1;
   } else {
     return 2;

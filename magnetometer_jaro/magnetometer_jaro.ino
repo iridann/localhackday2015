@@ -10,11 +10,17 @@ extern "C" {
 
 //janos and fraser
 #include <EngduinoAccelerometer.h>
+#include <EngduinoMagnetometer.h>
 #include <Wire.h>
 //
 
-
-
+// Fraser
+float initialise() {
+  float field[3];
+  EngduinoButton.waitUntilPressed();
+  EngduinoMagnetometer.xyz(field);
+  return field[2];  
+}
 
 // Janos' methods
 void shaking() {
@@ -23,8 +29,6 @@ void shaking() {
 
   while (true) {
     while (counter < 3) {
-            delay(100);
-
       EngduinoLEDs.setAll(YELLOW, 1);
       EngduinoAccelerometer.xyz(acc);
       Serial.print(" x: ");
@@ -37,10 +41,11 @@ void shaking() {
       Serial.print(counter);
       Serial.println();
 
-      if (acc[0] >= 1.2) {
+      if (acc[0] >= 1.5) {
         counter++;
         EngduinoLEDs.setAll(RED, 1);
       }
+      delay(100);
     }
     EngduinoLEDs.setAll(BLUE, 1);
     break;
@@ -50,39 +55,49 @@ void shaking() {
 /////////////////
 
 // Fraser - Reads the XYZ values and prints them through serial.
-int getXYZ() {
-  delay(1000);
+int getXYZ(float initz) {
   float field[3];
-  EngduinoAccelerometer.xyz(field);
+  EngduinoMagnetometer.xyz(field);
 
   float x = field[0];
   float y = field[1];
   float z = field[2];
-  //Serial.print("x: ");
-  //Serial.print(x);
-  //Serial.print(", y: ");
-  //Serial.print(y);
-  //Serial.print(", z: ");
-  //Serial.print(z);
-  //Serial.print(", choice: ");
-  return getChoice(z);
+  Serial.print("x: ");
+  Serial.print(x);
+  Serial.print(", y: ");
+  Serial.print(y);
+  Serial.print(", z: ");
+  Serial.print(z);
+  Serial.print(", choice: ");
+  return getChoice(z, initz);
   //Serial.println();
 }
 
 // Fraser - Determines if paper (0), scissors(1) or rock(2)
-int getChoice(float z) {
+int getChoice(float z, float initz) {
+  int init = int(initz);
   int value = int(z);
-  if (value < -0.60) {
-    return 0;
-  } else if ((value <= 0.60) && (value > -0.60)) {
-    return 1;
+  if (init > 0) {
+    if (value < init + 250) {
+      return 0;
+    } else if ((value > init + 250) && (value < init + 750)) {
+      return 1;
+    } else {
+      return 2;
+    }
   } else {
-    return 2;
+    if (value > init - 250) {
+      return 0;
+    } else if ((value > init - 250) && (value < init - 750)) {
+      return 1;
+    } else {
+      return 2;
+    }
   }
 }
 
 void setup() {
-  //EngduinoMagnetometer.begin();
+  EngduinoMagnetometer.begin();
   EngduinoIR.begin();
 
   //jaro
@@ -96,15 +111,12 @@ void setup() {
 void loop() {
   //decide what I want to do
   int decision = select_score_recv();
-
+  float initz = initialise();
   //prepare accelerometer
   shaking();
   
   //get score
-  int score = getXYZ();
-  Serial.print("my Score: ");
-  Serial.print(score);
-  Serial.println();
+  int score = getXYZ(initz);
 
 
   //send the shit
@@ -113,11 +125,9 @@ void loop() {
       score_send(score);
     } else {
       score_recv(score);
-      delay(1000000);
     }
 
   }
   delay(500);
 }
-
 

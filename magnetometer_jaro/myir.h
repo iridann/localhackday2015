@@ -81,7 +81,7 @@ void score_send(int o_score) {
 }
 
 //receive a score
-void score_recv(int t_score) {
+void score_recv(int choice) {
   RECV = 0;
 
   uint8_t buf[IRBUFSZ];
@@ -91,7 +91,52 @@ void score_recv(int t_score) {
     len = EngduinoIR.recv(buf);
     
     if (len > 0) {
-      EngduinoLEDs.setAll(pink[0], pink[1], pink[2]); 
+
+      // buf[0] is the result of the enemy
+      // choice is my result
+      //if(buf[0] == choice){
+        //EngduinoLEDs.setAll(YELLOW);
+        //return;
+      //}
+
+      Serial.print("enemy: ");
+      Serial.print(buf[0]);
+      Serial.println();
+      Serial.print("me: ");
+      Serial.print(choice);
+      Serial.println();
+
+      switch(buf[0]){
+        case 0: 
+          if(choice == 1)
+            EngduinoLEDs.setAll(GREEN);
+          else
+            EngduinoLEDs.setAll(RED);
+          break;
+
+        case 1:
+          if(choice == 0)
+            EngduinoLEDs.setAll(RED);
+          else
+            EngduinoLEDs.setAll(GREEN);
+          break;
+
+        case 2:
+          if(choice == 0)
+            EngduinoLEDs.setAll(GREEN);
+          else
+            EngduinoLEDs.setAll(RED);
+          break;
+
+
+      }
+      
+      RECV = 0;
+      return;
+
+
+
+      //EngduinoLEDs.setAll(pink[0], pink[1], pink[2]); 
     }
   }
 }

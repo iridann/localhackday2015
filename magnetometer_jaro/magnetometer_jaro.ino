@@ -35,7 +35,7 @@ void shaking() {
       Serial.print(counter);
       Serial.println();
 
-      if (acc[0] >= 1.5) {
+      if (acc[0] >= 1.2) {
         counter++;
         EngduinoLEDs.setAll(RED, 1);
       }
@@ -56,13 +56,13 @@ int getXYZ() {
   float x = field[0];
   float y = field[1];
   float z = field[2];
-  Serial.print("x: ");
-  Serial.print(x);
-  Serial.print(", y: ");
-  Serial.print(y);
-  Serial.print(", z: ");
-  Serial.print(z);
-  Serial.print(", choice: ");
+  //Serial.print("x: ");
+  //Serial.print(x);
+  //Serial.print(", y: ");
+  //Serial.print(y);
+  //Serial.print(", z: ");
+  //Serial.print(z);
+  //Serial.print(", choice: ");
   return getChoice(z);
   //Serial.println();
 }
@@ -72,7 +72,7 @@ int getChoice(float z) {
   int value = int(z);
   if (value < -0.50) {
     return 0;
-  } else if ((value > 0.50) && (value < -0.50)) {
+  } else if ((value < 0.50) && (value > -0.50)) {
     return 1;
   } else {
     return 2;
@@ -80,7 +80,7 @@ int getChoice(float z) {
 }
 
 void setup() {
-  EngduinoMagnetometer.begin();
+  //EngduinoMagnetometer.begin();
   EngduinoIR.begin();
 
   //jaro
@@ -100,6 +100,9 @@ void loop() {
   
   //get score
   int score = getXYZ();
+  Serial.print("my Score: ");
+  Serial.print(score);
+  Serial.println();
 
 
   //send the shit
@@ -108,6 +111,7 @@ void loop() {
       score_send(score);
     } else {
       score_recv(score);
+      delay(1000000);
     }
 
   }

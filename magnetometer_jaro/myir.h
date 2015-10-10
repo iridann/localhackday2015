@@ -131,6 +131,7 @@ void score_recv(int choice) {
 
       }
       
+      delay(100000);
       RECV = 0;
       return;
 

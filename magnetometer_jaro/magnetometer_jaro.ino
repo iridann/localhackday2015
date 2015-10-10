@@ -50,9 +50,10 @@ void shaking() {
 /////////////////
 
 // Fraser - Reads the XYZ values and prints them through serial.
-int getXYZ() {
-  delay(1000);
+int getXYZ( int d) {
   float field[3];
+  EngduinoButton.waitUntilPressed();
+  EngduinoButton.waitUntilReleased();
   EngduinoAccelerometer.xyz(field);
 
   float x = field[0];
@@ -62,21 +63,24 @@ int getXYZ() {
   //Serial.print(x);
   //Serial.print(", y: ");
   //Serial.print(y);
-  //Serial.print(", z: ");
-  //Serial.print(z);
-  //Serial.print(", choice: ");
+  Serial.print(", z: ");
+  Serial.print(z);
+Serial.print(", choice: ");
   return getChoice(z);
   //Serial.println();
 }
 
 // Fraser - Determines if paper (0), scissors(1) or rock(2)
 int getChoice(float z) {
-  int value = int(z);
-  if (value < -0.60) {
+  Serial.print("Choice z: ");
+  Serial.print(z);
+  Serial.println();
+  float value = z;
+  if (value < -0.50) {
     return 0;
-  } else if ((value <= 0.60) && (value > -0.60)) {
+  } else if ((value < 0.50) && (value > -0.50)) {
     return 1;
-  } else {
+  } else if (value >= 0.50) {
     return 2;
   }
 }
@@ -88,7 +92,7 @@ void setup() {
   //jaro
   EngduinoLEDs.begin();
   EngduinoButton.begin();
-  
+
   //janos
   EngduinoAccelerometer.begin();
 }
@@ -99,9 +103,9 @@ void loop() {
 
   //prepare accelerometer
   shaking();
-  
+
   //get score
-  int score = getXYZ();
+  int score = getXYZ(decision);
   Serial.print("my Score: ");
   Serial.print(score);
   Serial.println();
@@ -119,5 +123,3 @@ void loop() {
   }
   delay(500);
 }
-
-

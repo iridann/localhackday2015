@@ -33,7 +33,7 @@ void score_recv(int choice) {
     if (len > 0) {
       // buf[0] is the result of the enemy
       // choice is my result
-      if(buf[0] == choice){
+      if(buf[0] == choice) {
         EngduinoLEDs.setAll(YELLOW);
         return;
       }
@@ -59,8 +59,6 @@ void score_recv(int choice) {
           else
             EngduinoLEDs.setAll(RED);
           break;
-
-
       }
       
       delay(100000);
@@ -92,4 +90,3 @@ int select_score_recv() {
 }
 
 #endif
-

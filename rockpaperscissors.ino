@@ -40,8 +40,7 @@ void shaking() {
 int getXYZ() {
   float field[3];
   //wait with finding the arduino's position until button was pressed
-  EngduinoButton.waitUntilPressed();
-  EngduinoButton.waitUntilReleased();
+  delay(4000);
   EngduinoAccelerometer.xyz(field);
 
   //z-axis determines the position with respect to RPS

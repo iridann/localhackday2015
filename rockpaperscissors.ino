@@ -36,25 +36,42 @@ void shaking() {
   }
 }
 
-//Fraser - Reads the XYZ values and prints them through serial.
+ /* Fraser - Reads the accelerometer x, y and z axis acceleration 
+  *          values after a delay - to allow for discrepancies in
+  *          the time period between shaking ending and the player
+  *          finalising their choice.
+  *
+  *          Returns the result of the getChoice() function for the
+  *          read z axis acceleration value.
+  */
 int getXYZ() {
   float field[3];
-  //wait with finding the arduino's position until button was pressed
+  // Delay to account for discrepancy between finishing shaking and
+  // player finalising choice.
   delay(4000);
   EngduinoAccelerometer.xyz(field);
 
-  //z-axis determines the position with respect to RPS
+  // The z axis acceleration value is used to determine the position
+  // of the engduino for the purpose of the RPS game.
   float z = field[2];
   return getChoice(z);
 }
 
-// Fraser - Determines if paper (0), scissors(1) or rock(2)
+/* Fraser - Takes the z axis acceleration value passed to it
+ *          and determines the player's choice of element from
+ *          it, returning an integer value denoting which element
+ *          has been selected.
+ *
+ *          Paper corresponds to 0, Scissors correspond to 1 and
+ *          Rock corresponds to 2.
+ */
 int getChoice(float z) {
   float value = z;
 
-  //finely tuned values for engduino orientation
-  //when the angle is atleast 45deg, we know that
-  //the chosen element has changed
+  // Looks at the z axis acceleration value to determine
+  // angle of inclination from the rest position. The z
+  // values of -0.50 and 0.50 are the values at a 45 degree
+  // incline either side of rest (left and right respectively).
   if (value <= -0.50) {
     return 0;
   } else if ((value < 0.50) && (value > -0.50)) {

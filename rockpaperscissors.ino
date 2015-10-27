@@ -19,13 +19,13 @@ void shaking() {
 
   while (true) {
     while (counter < 3) {
-      delay(100);
+      delay(150);
 
       EngduinoLEDs.setAll(YELLOW, 1);
       EngduinoAccelerometer.xyz(acc);
 
       //if we reach enough acceleration when moving from up to down
-      if (acc[0] >= 1.2) {
+      if (acc[0] >= 1.25) {
         counter++;
         EngduinoLEDs.setAll(RED, 1);
       }
